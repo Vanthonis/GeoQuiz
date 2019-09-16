@@ -2,6 +2,7 @@ package edu.uwp.cs.csci323.geoquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,
-                        R.string.correct_toast,Toast.LENGTH_SHORT).show();
-
+                Toast myToast = Toast.makeText(MainActivity.this,R.string.correct_toast,Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                myToast.show();
             }
         });
 
@@ -31,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,
-                        R.string.incorrect_toast,Toast.LENGTH_SHORT).show();
-
+                Toast myToast = Toast.makeText(MainActivity.this,R.string.incorrect_toast,Toast.LENGTH_SHORT);
+                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                myToast.show();
             }
         });
-    }
 
+    }
 }
