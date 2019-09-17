@@ -5,12 +5,20 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mNextButton;
+    private TextView mQuestionTextView;
+
+    private Question[] mQustionBank = new Question[] {
+            new Question(R.string.question_australia, true),
+            new Question(R.string.question_ocean,true),
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast myToast = Toast.makeText(MainActivity.this,R.string.correct_toast,Toast.LENGTH_SHORT);
-                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,150);
                 myToast.show();
             }
         });
@@ -33,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast myToast = Toast.makeText(MainActivity.this,R.string.incorrect_toast,Toast.LENGTH_SHORT);
-                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                myToast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,150);
                 myToast.show();
             }
         });
