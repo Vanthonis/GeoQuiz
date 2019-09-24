@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
-                questionAnswered();
             }
         });
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
-                questionAnswered();
             }
         });
         updateQuestion();
@@ -106,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = mQuestionBank.length - 1;
                 }
-                questionAnswered();
                 updateQuestion();
             }
         });
@@ -158,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        questionAnswered();
     }
 
     private void questionAnswered() {
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             mPlayerPosition++;
         }
         Toast myToast = Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT);
-        myToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 150);
+        myToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
         myToast.show();
     }
 }
