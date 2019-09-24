@@ -11,17 +11,23 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final String KEY_INDEX = "index";
+    private static final String KEY_POS = "pos";
+    private static final String KEY_PER = "per";
+    private static final String KEY_BOL = "bol";
     private Button mTrueButton;
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPreviousButton;
     private TextView mQuestionTextView;
-    private double percent = 0;
-    private int position = 0;
+    private double mPlayerPercent = 0;
+    private int mPlayerPosition = 0;
+    private boolean[] mBooleans = new boolean[6];
 
     private Question[] mQuestionBank = new Question[]{
             new Question(R.string.question_australia, true),
@@ -37,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(bundle) called");
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mPlayerPercent = savedInstanceState.getDouble(KEY_PER, 0);
+            mPlayerPosition = savedInstanceState.getInt(KEY_POS, 0);
+            mBooleans = savedInstanceState.getBooleanArray(KEY_BOL);
         }
 
         mQuestionTextView = (TextView) findViewById((R.id.question_text_view));
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                questionAnswered();
             }
         });
 
@@ -60,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
-                buttonEnabled();
-
+                percentQuestion();
+                mBooleans[mCurrentIndex] = true;
+                questionAnswered();
             }
         });
 
@@ -70,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
-                buttonEnabled();
-
+                percentQuestion();
+                mBooleans[mCurrentIndex] = true;
+                questionAnswered();
             }
         });
 
@@ -82,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
-                buttonEnabled();
-                percentQuestion();
+                questionAnswered();
             }
         });
         updateQuestion();
@@ -96,12 +106,11 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = mQuestionBank.length - 1;
                 }
+                questionAnswered();
                 updateQuestion();
-                buttonEnabled();
             }
         });
         updateQuestion();
-
 
     }
 
@@ -126,8 +135,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putDouble(KEY_PER, mPlayerPercent);
+        savedInstanceState.putInt(KEY_POS, mPlayerPosition);
+        savedInstanceState.putBooleanArray(KEY_BOL, mBooleans);
     }
 
     @Override
@@ -147,27 +160,24 @@ public class MainActivity extends AppCompatActivity {
         mQuestionTextView.setText(question);
     }
 
-    private void buttonEnabled() {
-        if (position == mCurrentIndex) {
-            mTrueButton.setEnabled(true);
-            mFalseButton.setEnabled(true);
-        } else {
+    private void questionAnswered() {
+
+        if (mBooleans[mCurrentIndex] == true) {
             mFalseButton.setEnabled(false);
             mTrueButton.setEnabled(false);
+        } else {
+            mFalseButton.setEnabled(true);
+            mTrueButton.setEnabled(true);
         }
+
 
     }
 
     private void percentQuestion() {
         double questAns = 0;
-        int cont = 0;
 
-        if (position < 6) {
-            cont = 6 - position;
-            Toast myCont = Toast.makeText(MainActivity.this, String.valueOf(cont) + " Questions Left.", Toast.LENGTH_SHORT);
-            myCont.show();
-        } else {
-            questAns = percent / 6 * 100;
+        if (mPlayerPosition == mQuestionBank.length) {
+            questAns = mPlayerPercent / mQuestionBank.length * 100;
             questAns = (int) questAns;
             Toast perToast = Toast.makeText(MainActivity.this, String.valueOf(questAns) + " Percent", Toast.LENGTH_SHORT);
             perToast.show();
@@ -183,14 +193,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
-            percent++;
-            position++;
+            mPlayerPercent++;
+            mPlayerPosition++;
         } else {
             messageResId = R.string.incorrect_toast;
-            position++;
+            mPlayerPosition++;
         }
         Toast myToast = Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT);
-        myToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+        myToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 150);
         myToast.show();
     }
 }
