@@ -11,8 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -22,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_BOL = "bol";
     private Button mTrueButton;
     private Button mFalseButton;
-    private ImageButton mNextButton;
-    private ImageButton mPreviousButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private double mPlayerPercent = 0;
     private int mPlayerPosition = 0;
@@ -43,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        ImageButton mNextButton;
+        ImageButton mPreviousButton;
+
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(bundle) called");
         setContentView(R.layout.activity_main);
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             mBooleans = savedInstanceState.getBooleanArray(KEY_BOL);
         }
 
-        mQuestionTextView = (TextView) findViewById((R.id.question_text_view));
+        mQuestionTextView = findViewById((R.id.question_text_view));
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mTrueButton = (Button) findViewById(R.id.true_button);
+        mTrueButton =  findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mFalseButton = (Button) findViewById(R.id.false_button);
+        mFalseButton = findViewById(R.id.false_button);
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mNextButton = (ImageButton) findViewById(R.id.next_button);
+        mNextButton = findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         updateQuestion();
-        mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
+        mPreviousButton = findViewById(R.id.previous_button);
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
                     mCurrentIndex = mQuestionBank.length - 1;
                 }
                 updateQuestion();
+            }
+        });
+        mCheatButton = findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+                    public void onClick(View view){
+                //Start CheatActivity
             }
         });
         updateQuestion();
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void questionAnswered() {
 
-        if (mBooleans[mCurrentIndex] == true) {
+        if (mBooleans[mCurrentIndex]) {
             mFalseButton.setEnabled(false);
             mTrueButton.setEnabled(false);
         } else {
@@ -172,12 +179,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void percentQuestion() {
-        double questAns = 0;
+        double questAns;
 
         if (mPlayerPosition == mQuestionBank.length) {
             questAns = mPlayerPercent / mQuestionBank.length * 100;
             questAns = (int) questAns;
-            Toast perToast = Toast.makeText(MainActivity.this, String.valueOf(questAns) + " Percent", Toast.LENGTH_SHORT);
+            Toast perToast = Toast.makeText(MainActivity.this, questAns + " Percent", Toast.LENGTH_SHORT);
             perToast.show();
         }
 
@@ -187,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
-        int messageResId = 0;
+        int messageResId;
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
