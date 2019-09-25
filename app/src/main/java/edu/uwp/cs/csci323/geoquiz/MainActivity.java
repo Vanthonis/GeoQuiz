@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPreviousButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private double mPlayerPercent = 0;
     private int mPlayerPosition = 0;
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+        mCheatButton = (Button)findViewById(R.id.)
+
         updateQuestion();
 
     }
